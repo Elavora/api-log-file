@@ -1,5 +1,10 @@
 # elavora/api-log-file
 
+[![Packagist Version](https://img.shields.io/packagist/v/elavora/api-log-file.svg?style=flat-square)](https://packagist.org/packages/elavora/api-log-file)
+[![PHP Version](https://img.shields.io/packagist/php-v/elavora/api-log-file.svg?style=flat-square)](https://packagist.org/packages/elavora/api-log-file)
+[![Composer Quality](https://github.com/Elavora/api-log-file/actions/workflows/quality.yml/badge.svg?branch=main)](https://github.com/Elavora/api-log-file/actions/workflows/quality.yml)
+[![CodeQL](https://github.com/Elavora/api-log-file/actions/workflows/codeql.yml/badge.svg?branch=main)](https://github.com/Elavora/api-log-file/actions/workflows/codeql.yml)
+[![License](https://img.shields.io/packagist/l/elavora/api-log-file.svg?style=flat-square)](LICENSE)
 Pacote opcional de logs em arquivo para o framework Elavora.
 
 ```php
