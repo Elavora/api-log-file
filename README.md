@@ -1,13 +1,33 @@
-# elavora/api-log-file
+# api-log-file
 
-Pacote opcional de logs em arquivo para o framework Elavora.
+[![Packagist Version](https://img.shields.io/packagist/v/elavora/api-log-file.svg?style=flat-square)](https://packagist.org/packages/elavora/api-log-file)
+[![PHP Version](https://img.shields.io/packagist/php-v/elavora/api-log-file.svg?style=flat-square)](https://packagist.org/packages/elavora/api-log-file)
+[![Composer Quality](https://github.com/Elavora/api-log-file/actions/workflows/quality.yml/badge.svg?branch=main)](https://github.com/Elavora/api-log-file/actions/workflows/quality.yml)
+[![CodeQL](https://github.com/Elavora/api-log-file/actions/workflows/codeql.yml/badge.svg?branch=main)](https://github.com/Elavora/api-log-file/actions/workflows/codeql.yml)
+[![License](https://img.shields.io/packagist/l/elavora/api-log-file.svg?style=flat-square)](https://packagist.org/packages/elavora/api-log-file)
+
+Writer opcional que grava cada entrada de log estruturado em uma linha JSON.
+
+## Requisitos
+
+- PHP 8.3 ou superior.
+- `elavora/api-framework` 1.x.
+
+## Instalacao
+
+```bash
+composer require elavora/api-log-file
+```
+
+## Inicio rapido
 
 ```php
 use Elavora\Api\Extension\LogFile\FileLogExtension;
+use Elavora\Api\Framework\Application;
 use Elavora\Api\Framework\Logging\Logger;
 
-$application->extend(new FileLogExtension([
-    'path' => __DIR__ . '/../storage/logs/app.log',
+$application = Application::create()->extend(new FileLogExtension([
+    'path' => sys_get_temp_dir() . '/elavora/app.log',
 ]));
 
 $application->container()
@@ -15,17 +35,8 @@ $application->container()
     ->info('Requisicao recebida', ['route' => '/health']);
 ```
 
-Cada entrada e gravada como uma linha JSON com o formato:
+O writer cria diretorios ausentes e lanca `RuntimeException` se a linha nao for gravada integralmente.
 
-```php
-[
-    'timestamp' => gmdate('c'),
-    'level' => 'info',
-    'message' => 'Requisicao recebida',
-    'request_id' => '...',
-    'context' => [],
-]
-```
+## Documentacao
 
-O pacote implementa `Elavora\Api\Framework\Contracts\LogWriter` e deve ser
-instalado somente quando a aplicacao precisar gravar logs em arquivo.
+Consulte o [guia de uso](docs/USO.md) para configuracao e validacao local.
