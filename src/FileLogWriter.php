@@ -13,9 +13,7 @@ final class FileLogWriter implements LogWriter
     /**
      * @param FileLogConfig $config Configuracao do arquivo de destino.
      */
-    public function __construct(private readonly FileLogConfig $config)
-    {
-    }
+    public function __construct(private readonly FileLogConfig $config) {}
 
     /**
      * @throws JsonException

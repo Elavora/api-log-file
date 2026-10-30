@@ -8,9 +8,7 @@ use InvalidArgumentException;
 
 final class FileLogConfig
 {
-    private function __construct(private readonly string $path)
-    {
-    }
+    private function __construct(private readonly string $path) {}
 
     /**
      * Cria a configuracao a partir de array.
