@@ -412,11 +412,15 @@ Conteúdo exato:
 ### `composer.json`
 
 O arquivo é formatado com **2 espaços** de indentação (regra do `.editorconfig` para `*.json`), sem espaços duplos
-depois de `:` e sem sequências `\uXXXX` (por exemplo, `">=8.1"`, e não `"\u003e=8.1"`). Depois do PR, ele tem:
+depois de `:` e sem sequências `\uXXXX` (por exemplo, `">=8.3"`, e não `"\u003e=8.3"`). Depois do PR, ele tem:
 
 ```json
 {
   "name": "elavora/<repo>",
+  "require": {
+    "php": ">=8.3",
+    "elavora/api-framework": "^2.0"
+  },
   "require-dev": {
     "elavora/code-standards": "^1.1",
     "phpstan/phpstan": "^2.2",
@@ -436,13 +440,29 @@ depois de `:` e sem sequências `\uXXXX` (por exemplo, `">=8.1"`, e não `"\u003
   },
   "config": {
     "sort-packages": true
+  },
+  "extra": {
+    "branch-alias": {
+      "dev-main": "1.0-dev"
+    }
   }
 }
 ```
 
-O exemplo mostra só as chaves que esta adoção cria ou muda. As restrições de `require` não mudam neste PR: `php` continua `>=8.1` e
-`elavora/api-framework` continua `^0.3.1` (o suporte ao framework 2 é outra fase). As demais (`description`, `type`, `license`, as outras
-dependências de `require`, `autoload`, `extra.branch-alias`) continuam como estão, na ordem atual.
+O exemplo mostra só as chaves que este PR cria ou muda. As demais (`description`, `type`, `license`, `autoload`)
+continuam como estão, na ordem atual.
+
+- **Este PR também é o upgrade para o framework 2.** Antes, `php` era `>=8.1` e `elavora/api-framework` era `^0.3.1`.
+  Agora `php` é `>=8.3` (o que o framework 2 exige) e `elavora/api-framework` é `^2.0`. Não existe `^0.3`, `^1.0`
+  nem uma união como `^1.0 || ^2.0` em `require`.
+- `extra.branch-alias`: `dev-main` passa de `0.1-dev` para `1.0-dev`, o major que o merge publica
+  ([Versões e release](#versões-e-release)).
+- O `src/` não muda de comportamento. Os namespaces `Elavora\Api\Extension\LogFile\...` e
+  `Elavora\Api\Framework\...` são os mesmos, e `FileLogExtension`, `FileLogWriter`, `FileLogConfig` e
+  `Contracts\LogWriter` mantêm assinaturas e regras. No framework 0.3 a interface `Contracts\LogWriter` não existe
+  no namespace usado pelo pacote, e por isso a suíte já falhava na `main`: a causa é a dependência, e o upgrade resolve.
+- Os ajustes do PHPStan (nível 8, sem `baseline`) e do estilo PER-CS vão em commits próprios e não mudam o
+  comportamento.
 
 - `elavora/code-standards` fica em `require-dev`, nunca em `require`. A restrição é `^1.` seguido do minor (1 ou
   maior) e, opcionalmente, do patch. O minor mínimo é 1 porque o subcomando `lint` só existe a partir da 1.1.0, e o CI
@@ -835,9 +855,15 @@ As regras completas estão no `Elavora/.github`: [versionamento](https://github.
   maior número existente. O workflow nunca apaga nem move tag.
 - Só o último PR de uma série de mudanças leva `release`.
 
-**Neste repositório:** a última tag é a legada `v0.2.0`, que conta como a estável `0.2.0`. O PR de adoção do pipeline
-não leva `release` nem label de versão, então o merge gera `0.2.1-beta.1`. O `release.yml` novo roda no merge desse
-mesmo PR, e o `tag_on_merge.yml` antigo já não existe nele, então sai uma release só.
+**Neste repositório:** as tags são legadas (`v0.1.0`, `v0.1.1` e `v0.2.0`), e a última é a `v0.2.0`, que conta como a
+estável `0.2.0`. Um único PR faz o upgrade para o `elavora/api-framework` `^2.0` e adota o pipeline. Ele é o último
+PR da série e leva as labels `upgrade` (major) e `release` (estável), então o merge gera a estável **`1.0.0`**
+(`0.2.0` com major). O `release.yml` novo roda no merge desse mesmo PR, e o `tag_on_merge.yml` antigo já não existe
+nele, então sai uma release só.
+
+O PR tem o título `feat!: atualiza para o framework 2 e adota o pipeline central` e commits separados por assunto:
+`docs`, `test`, `ci`/`build` (pipeline), `style` (PER-CS), `feat!` (upgrade: PHP, framework e `branch-alias`) e as
+correções do PHPStan.
 
 O Packagist é avisado pelo `release.yml` a cada release, com o secret `PACKAGIST_WEBHOOK_URL`. O pacote só fica
 disponível na versão nova depois dessa notificação.
@@ -852,7 +878,7 @@ como texto ou JSON. Os arquivos `.cjs` não são PHP: o PHPUnit e o `composer li
 | `workflows.test.cjs` | os seis workflows contra os blocos desta página, o formato das referências e as regras gerais |
 | `dependabot.test.cjs` | o `dependabot.yml` exato, as labels, o prefixo dos commits e o grupo do CodeQL |
 | `devcontainer.test.cjs` | o `devcontainer.json` exato e a imagem `8.3-latest` |
-| `estilo.test.cjs` | o `composer.json` (pacote em `require-dev`, restrição, scripts), o stub do PHP-CS-Fixer, os marcadores do `.editorconfig`, o `.gitignore` e o `.gitattributes` |
+| `estilo.test.cjs` | o `composer.json` (`php` `>=8.3`, `elavora/api-framework` `^2.0`, `branch-alias` `1.0-dev`, pacote em `require-dev`, restrição, scripts), o stub do PHP-CS-Fixer, os marcadores do `.editorconfig`, o `.gitignore` e o `.gitattributes` |
 | `phpunit.test.cjs` | o `phpunit.xml` exato (bloco `<source>`, `cacheDirectory`, `failOnWarning`) |
 | `removidos.test.cjs` | os arquivos que não podem existir |
 | `_helpers.cjs` | funções comuns (leitura de arquivos, normalização das referências) |

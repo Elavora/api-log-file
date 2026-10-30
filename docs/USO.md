@@ -33,7 +33,29 @@ $application->extend(new FileLogExtension([
 
 ## Dependencias de runtime
 
-- `elavora/api-framework` `^0.3.1`
+- PHP `>=8.3`
+- `elavora/api-framework` `^2.0`
+
+## Versão e compatibilidade
+
+A versão `1.0` exige PHP `>=8.3` e `elavora/api-framework` `^2.0`. Antes (`0.x`), o pacote aceitava PHP `>=8.1` e
+`elavora/api-framework` `^0.3.1`. Para atualizar a partir da `0.2.0`, troque as restrições no `composer.json` do seu
+projeto e rode `composer update elavora/api-framework elavora/api-log-file`:
+
+```json
+{
+  "require": {
+    "php": ">=8.3",
+    "elavora/api-framework": "^2.0",
+    "elavora/api-log-file": "^1.0"
+  }
+}
+```
+
+A API do pacote não muda: `FileLogExtension`, `FileLogWriter`, `FileLogConfig` e `Contracts\LogWriter` mantêm
+namespaces, assinaturas e comportamento. Só a dependência do framework sobe de major (e o PHP mínimo sobe para 8.3).
+O pacote usa os contratos `Elavora\Api\Framework\Contracts\Extension` e `Elavora\Api\Framework\Contracts\LogWriter`
+e o `Elavora\Api\Framework\Logging\Logger` do framework 2.
 
 ## Validacao no projeto consumidor
 
