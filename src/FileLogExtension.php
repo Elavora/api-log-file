@@ -37,16 +37,24 @@ final class FileLogExtension implements Extension
     {
         $application->container()->bind(
             LogWriter::class,
-            fn (): LogWriter => $this->createWriter()
+            fn(): LogWriter => $this->createWriter(),
         );
         $application->container()->bind(
             FrameworkLogWriter::class,
-            fn (): FrameworkLogWriter => $application->container()->get(LogWriter::class)
+            fn(): FrameworkLogWriter => $this->resolveWriter($application),
         );
         $application->container()->bind(
             Logger::class,
-            fn (): Logger => new Logger($application->container()->get(LogWriter::class))
+            fn(): Logger => new Logger($this->resolveWriter($application)),
         );
+    }
+
+    private function resolveWriter(Application $application): LogWriter
+    {
+        $writer = $application->container()->get(LogWriter::class);
+        assert($writer instanceof LogWriter);
+
+        return $writer;
     }
 
     private function createWriter(): LogWriter

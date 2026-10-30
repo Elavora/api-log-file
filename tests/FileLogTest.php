@@ -23,20 +23,18 @@ final class FileLogTest extends TestCase
         self::assertFileExists($path);
         self::assertJsonStringEqualsJsonString(
             '{"message":"teste","level":"info"}',
-            trim((string) file_get_contents($path))
+            trim((string) file_get_contents($path)),
         );
     }
 
     public function testExtensionRegistersLocalAndFrameworkContracts(): void
     {
         $fakeWriter = new class implements LogWriter {
-            public function write(array $entry): void
-            {
-            }
+            public function write(array $entry): void {}
         };
         $application = Application::create()->extend(new FileLogExtension(
             ['path' => sys_get_temp_dir() . '/api-file.log'],
-            static fn (FileLogConfig $config): LogWriter => $fakeWriter
+            static fn(FileLogConfig $config): LogWriter => $fakeWriter,
         ));
 
         self::assertSame($fakeWriter, $application->container()->get(LogWriter::class));
@@ -47,18 +45,16 @@ final class FileLogTest extends TestCase
     public function testReusesSameWriterInstanceForLocalAndFrameworkContracts(): void
     {
         $fakeWriter = new class implements LogWriter {
-            public function write(array $entry): void
-            {
-            }
+            public function write(array $entry): void {}
         };
         $application = Application::create()->extend(new FileLogExtension(
             ['path' => sys_get_temp_dir() . '/api-file.log'],
-            static fn (FileLogConfig $config): LogWriter => $fakeWriter
+            static fn(FileLogConfig $config): LogWriter => $fakeWriter,
         ));
 
         self::assertSame(
             $application->container()->get(LogWriter::class),
-            $application->container()->get(FrameworkLogWriter::class)
+            $application->container()->get(FrameworkLogWriter::class),
         );
     }
 }
