@@ -91,6 +91,15 @@ test.describe('composer.json', () => {
         assert.ok('elavora/api-framework' in (c.require || {}), 'dependência de runtime perdida');
     });
 
+    test('require tem elavora/api-framework ^2.0 (upgrade para o framework 2 no mesmo PR)', () => {
+        assert.equal((composer().require || {})['elavora/api-framework'], '^2.0');
+    });
+
+    test('extra.branch-alias: dev-main é 1.0-dev', () => {
+        const alias = ((composer().extra || {})['branch-alias'] || {})['dev-main'];
+        assert.equal(alias, '1.0-dev');
+    });
+
     test('elavora/code-standards ^1.N (N >= 1) em require-dev, fora do require', () => {
         const c = composer();
         const constraint = (c['require-dev'] || {})['elavora/code-standards'];
