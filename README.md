@@ -33,8 +33,9 @@ Cada entrada e gravada como uma linha JSON com o formato:
 ]
 ```
 
-O pacote implementa `Elavora\Api\Framework\Contracts\LogWriter` e deve ser
-instalado somente quando a aplicacao precisar gravar logs em arquivo.
+O pacote implementa `Elavora\Api\Extension\LogFile\Contracts\LogWriter`, que estende
+`Elavora\Api\Framework\Contracts\LogWriter`, e deve ser instalado somente quando a aplicacao precisar gravar logs em
+arquivo.
 
 ## Instalação
 
