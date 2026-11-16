@@ -33,7 +33,7 @@ $application->extend(new FileLogExtension([
 
 ## Dependencias de runtime
 
-- PHP `>=8.3`
+- PHP `>=8.4`
 - `elavora/api-framework` `^2.0`
 
 ## Versão e compatibilidade
@@ -45,7 +45,7 @@ projeto e rode `composer update elavora/api-framework elavora/api-log-file`:
 ```json
 {
   "require": {
-    "php": ">=8.3",
+    "php": ">=8.4",
     "elavora/api-framework": "^2.0",
     "elavora/api-log-file": "^1.0"
   }
